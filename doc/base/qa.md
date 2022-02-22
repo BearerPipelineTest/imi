@@ -35,3 +35,9 @@
 当项目文件放置在，共享目录等不支持文件锁的文件系统时，可以配置一个支持文件锁的目录。比如：`/tmp`。
 
 * 可以在运行命令时指定环境变量：`IMI_MACRO_LOCK_FILE_DIR=/tmp vendor/bin/imi-swoole swoole/start`
+
+## 启动服务时输出 FileLock: unsupported
+
+imi 2.1 引入的宏定义特性依赖文件锁功能，当项目运行在共享目录等不支持文件锁的文件系统时，会报警告，并且建议配置一个支持文件锁的目录。比如：`/tmp`。
+
+* 可以在运行命令时指定环境变量：`IMI_MACRO_LOCK_FILE_DIR=/tmp vendor/bin/imi-swoole swoole/start`

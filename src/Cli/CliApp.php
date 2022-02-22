@@ -5,10 +5,12 @@ declare(strict_types=1);
 namespace Imi\Cli;
 
 use Imi\App;
+use Imi\AppContexts;
 use Imi\Bean\Scanner;
 use Imi\Config;
 use Imi\Core\App\Contract\BaseApp;
 use Imi\Core\App\Enum\LoadRuntimeResult;
+use Imi\Util\File;
 use Imi\Util\Imi;
 use Imi\Util\Process\ProcessAppContexts;
 use Imi\Util\System;
@@ -222,6 +224,7 @@ class CliApp extends BaseApp
         }
         $output->writeln('<info>CPU:</info> ' . System::getCpuCoresNum() . ' Cores');
         $output->writeln('<info>Disk:</info> Free ' . Imi::formatByte(@disk_free_space('.'), 3) . ' / Total ' . Imi::formatByte(@disk_total_space('.'), 3));
+        $output->writeln('<info>FileLock:</info> ' . (File::isSupportFileLock(App::get(AppContexts::APP_PATH)) ? 'supported' : '<error>unsupported</error>'));
 
         if ($netIp = System::netLocalIp())
         {

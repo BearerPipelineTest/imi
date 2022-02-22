@@ -115,3 +115,21 @@ File::putContents('./a/b/c/1.txt', '123');
 // /a/b/c/1.jpg
 File::absolute('/a/b/d/e/../../c/./1.jpg');
 ```
+
+### getBaseNameBeforeFirstDot
+
+获取在第一个点之前的文件名
+
+```php
+// a
+File::getBaseNameBeforeFirstDot('a.b.c');
+```
+
+### isSupportFileLock
+
+检查目录的文件系统是否支持文件锁
+
+```php
+File::isSupportFileLock(); // 不传则使用 imi/src/Util 目录做测试
+File::isSupportFileLock('传入指定目录');
+```

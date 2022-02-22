@@ -387,6 +387,9 @@ class File
         return implode(\DIRECTORY_SEPARATOR, $absolutes);
     }
 
+    /**
+     * 获取在第一个点之前的文件名.
+     */
     public static function getBaseNameBeforeFirstDot(string $path): string
     {
         $path = basename($path);
@@ -397,5 +400,58 @@ class File
         }
 
         return substr($path, 0, $index);
+    }
+
+    /**
+     * 检查目录的文件系统是否支持文件锁
+     */
+    public static function isSupportFileLock(string $path = ''): bool
+    {
+        if ('' === $path)
+        {
+            $fileName = tempnam(__DIR__, 'imi');
+        }
+        else
+        {
+            $fileName = tempnam($path, 'imi');
+        }
+        $fp1 = fopen($fileName, 'w+');
+        if (false === $fp1)
+        {
+            return false;
+        }
+        try
+        {
+            if (!flock($fp1, \LOCK_EX | \LOCK_NB))
+            {
+                return false;
+            }
+            $fp2 = fopen($fileName, 'w+');
+            if (false === $fp2)
+            {
+                return false;
+            }
+            // 如果加锁成功就是不支持文件锁
+            if (flock($fp2, \LOCK_EX | \LOCK_NB))
+            {
+                return false;
+            }
+        }
+        finally
+        {
+            flock($fp1, \LOCK_UN);
+            fclose($fp1);
+            if (isset($fp2))
+            {
+                flock($fp2, \LOCK_UN);
+                fclose($fp2);
+            }
+            if (is_file($fileName))
+            {
+                unlink($fileName);
+            }
+        }
+
+        return true;
     }
 }
